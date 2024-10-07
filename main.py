@@ -34,10 +34,10 @@ user_message_counts = {}
 user_conversations = {}
 
 # User daily limit
-USER_DAILY_LIMIT = 8
+USER_DAILY_LIMIT = 15
 
 # Maximum conversation history length
-MAX_CONVERSATION_LENGTH = 8
+MAX_CONVERSATION_LENGTH = 5
 
 # Threshold for topic similarity (越低表示越相似)
 SIMILARITY_THRESHOLD = 0.5
