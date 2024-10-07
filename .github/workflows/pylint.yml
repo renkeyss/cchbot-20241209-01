@@ -23,4 +23,4 @@ jobs:
 
     - name: Run your code (if applicable)
       run: |
-        python your_script.py  # 替換為您的主程式名
+        python main.py  # 替換為您的主程式名
