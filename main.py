@@ -37,7 +37,7 @@ user_conversations = {}
 USER_DAILY_LIMIT = 15
 
 # Maximum conversation history length
-MAX_CONVERSATION_LENGTH = 5
+MAX_CONVERSATION_LENGTH = 8
 
 # Threshold for topic similarity (越低表示越相似)
 SIMILARITY_THRESHOLD = 0.5
