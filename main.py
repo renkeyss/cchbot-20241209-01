@@ -20,7 +20,7 @@ _ = load_dotenv(find_dotenv())
 
 user_message_counts = {}
 
-USER_DAILY_LIMIT = 10
+USER_DAILY_LIMIT = 2
 
 def reset_user_count(user_id):
     user_message_counts[user_id] = {
@@ -29,7 +29,6 @@ def reset_user_count(user_id):
     }
 
 async def call_openai_assistant_api(user_message):
-
     logger.info(f"調用 OpenAI，消息: {user_message}")
 
     try:
@@ -61,8 +60,8 @@ async def call_openai_assistant_api(user_message):
         return message_content.value
 
     except OpenAIError as e:
-            logger.error(f"OpenAI API 錯誤: {e}")
-            return "抱歉，我無法處理您的請求，請稍後再試。"
+        logger.error(f"OpenAI API 錯誤: {e}")
+        return "抱歉，我無法處理您的請求，請稍後再試。"
 
     except Exception as e:
         logger.error(f"調用 OpenAI 助手時出現未知錯誤: {e}")
@@ -112,10 +111,9 @@ async def handle_callback(request: Request):
 
         logger.info(f"Received message from user {user_id}: {user_message}")
 
-        if user_id in user_message_counts:
-            if datetime.now() >= user_message_counts[user_id]['reset_time']:
-                reset_user_count(user_id)
-        else:
+        if user_id not in user_message_counts:
+            reset_user_count(user_id)
+        elif datetime.now() >= user_message_counts[user_id]['reset_time']:
             reset_user_count(user_id)
 
         if user_message_counts[user_id]['count'] >= USER_DAILY_LIMIT:
