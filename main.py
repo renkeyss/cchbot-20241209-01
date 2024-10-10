@@ -122,7 +122,7 @@ async def handle_callback(request: Request):
             logger.info(f"User {user_id} exceeded daily limit")
             await line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="您今天的用量已經超過，請明天再詢問。")
+                TextSendMessage(text=""您好：您的問題似乎相當多元，但為了讓有限的資源可以讓所有人共享，所以請恕我今天無法再提供回覆，您可明天繼續再次使用本服務，若有急迫性的問題需要瞭解，歡迎致電 04-7238595 分機3239 我們將有專人為您服務，謝謝。")
             )
             continue
 
