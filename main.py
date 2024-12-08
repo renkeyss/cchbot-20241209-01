@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from openai import OpenAI
 import os
@@ -67,7 +66,7 @@ async def call_openai_assistant_api(user_message):
 
     except Exception as e:
         logger.error(f"調用 OpenAI 助手時出現未知錯誤: {e}")
-        return "系統出現錯誤，請稍後再試。"
+        return "這裡是AI助手系統出現錯誤，請稍後再試。"
 
 channel_secret = os.getenv('ChannelSecret', None)
 channel_access_token = os.getenv('ChannelAccessToken', None)
