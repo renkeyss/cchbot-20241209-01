@@ -20,7 +20,7 @@ _ = load_dotenv(find_dotenv())
 
 user_message_counts = {}
 
-USER_DAILY_LIMIT = 15
+USER_DAILY_LIMIT = 10
 
 def reset_user_count(user_id):
     user_message_counts[user_id] = {
@@ -29,7 +29,6 @@ def reset_user_count(user_id):
     }
 
 async def call_openai_assistant_api(user_message):
-
     logger.info(f"調用 OpenAI，消息: {user_message}")
 
     try:
@@ -61,8 +60,8 @@ async def call_openai_assistant_api(user_message):
         return message_content.value
 
     except OpenAIError as e:
-            logger.error(f"OpenAI API 錯誤: {e}")
-            return "抱歉，我無法處理您的請求，請稍後再試。"
+        logger.error(f"OpenAI API 錯誤: {e}")
+        return "抱歉，我無法處理您的請求，請稍後再試。"
 
     except Exception as e:
         logger.error(f"調用 OpenAI 助手時出現未知錯誤: {e}")
@@ -84,7 +83,8 @@ line_bot_api = AsyncLineBotApi(channel_access_token, async_http_client)
 parser = WebhookParser(channel_secret)
 
 introduction_message = (
-    "我是您的小助理，很高興為您服務。"
+    "我是 彰化基督教醫院 內分泌暨新陳代謝科 小助理，如果您有任何關於：糖尿病、高血壓、甲狀腺的相關問題，您可以向我詢問。"
+    "但基本上我是由 OPENAI 大型語言模型訓練，所以當您發現我回覆的答案有誤時，建議您要向您的醫療團隊做進一步的諮詢，謝謝！"
 )
 
 @app.post("/callback")
@@ -111,17 +111,16 @@ async def handle_callback(request: Request):
 
         logger.info(f"Received message from user {user_id}: {user_message}")
 
-        if user_id in user_message_counts:
-            if datetime.now() >= user_message_counts[user_id]['reset_time']:
-                reset_user_count(user_id)
-        else:
+        if user_id not in user_message_counts:
+            reset_user_count(user_id)
+        elif datetime.now() >= user_message_counts[user_id]['reset_time']:
             reset_user_count(user_id)
 
         if user_message_counts[user_id]['count'] >= USER_DAILY_LIMIT:
             logger.info(f"User {user_id} exceeded daily limit")
             await line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="您今天的用量已經超過，請明天再詢問。")
+                TextSendMessage(text="您好：您的問題似乎相當多元，但為了讓有限的資源可以讓所有人共享，所以請恕我今天無法再提供回覆，您可明天繼續再次使用本服務，若有急迫性的問題需要瞭解，歡迎致電 04-7238595 分機3239 我們將有專人為您服務，謝謝。")
             )
             continue
 
